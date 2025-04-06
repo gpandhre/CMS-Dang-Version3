@@ -28,21 +28,9 @@
             <h3>Votes</h3>
             </div>
         </div> 
-<?php
-     if($complaintData['files'])
-     {
-        echo "
-            <div class='comp-img'>
-            <img src='".$complaintData['files']."' alt='image-not-found'>
-            </div>";
-     }
-     else
-     {
-        echo "
-            <div class='comp-img'>
-            </div>";
-     } 
-?>
+    <div class="comp-img">
+        <img src="<?=$complaintData['files']?>" alt="">
+    </div>
     <div class="details">
         <div class="subject" style="font-size:1.6rem; font-weight:700"><?= $complaintData['subject']?></div>
         <div class="filed-by"style="font-size:1.4rem; font-weight:700"><span><?=$complaintData['user_name']?></span></div>

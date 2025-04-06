@@ -19,7 +19,7 @@ $email_template = "
             <h2>You have registered with Complaint Management System - Dangs</h2>
             <h5>Verify your email address to login with the below given link</h5>
             <br/><br/>
-            <a href = 'http://localhost/cms_dang/verify-user-email.php?token=$verify_token'>Click Here </a> ";
+            <a href = 'http://localhost/cms-dang-version3/verify-user-email.php?token=$verify_token'>Click Here </a> ";
 
 $message = (new Swift_Message())
 ->setSubject('Email Verification from CMS')
@@ -161,9 +161,76 @@ if(isset($_SESSION['auth_user']))
 }
 
 
+// Complaint Edit
+
+if(isset($_SESSION['auth_user']))
+{
+    if(isset($_POST['com-edit-btn']))
+{
+    $cId = validate($_POST['c_id']);
+    $category = validate($_POST['category']);
+    $subCategory = validate($_POST['sub-category']);
+    $address = validate($_POST['address']);
+    $city = validate($_POST['city']);
+    $subject = validate($_POST['subject']);
+    $description = validate($_POST['complaint-desc']);
+ 
 
 
-// voting
+    if( $category != '' && $subCategory != '' && $address != '' && $city != '' && $subject != '' && $description != '')
+    {
+        
+        $data =[
+            
+            'cType'=>$category,
+            'sub_category'=>$subCategory,
+            'address'=>$address,
+            'city'=>$city,
+            'subject'=>$subject,
+            'description'=>$description
+            
+        ];
+        
+        $result = update('complaints',$cId,$data);
+        if($result)
+        {   
+
+            $last_id = mysqli_query($conn,"SELECT id FROM complaints ORDER BY updated_at DESC LIMIT 1");
+            if(mysqli_num_rows($last_id)>0)
+            {
+                $lastDeptId = mysqli_fetch_assoc($last_id);
+                $fetchDeptName = mysqli_query($conn,"select cType from complaints where id = $lastDeptId[id]");
+                if(mysqli_num_rows($fetchDeptName)>0)
+                {
+                    $deptName = mysqli_fetch_assoc($fetchDeptName);
+    
+                    $fetchDeptId = mysqli_query($conn,"select dept_id from department where dept_name = '$deptName[cType]'");
+                    if(mysqli_num_rows($fetchDeptId)>0)
+                    {
+                        $deptId = mysqli_fetch_assoc($fetchDeptId);
+                        $updateDeptId = mysqli_query($conn,"update complaints set dept_id = $deptId[dept_id] where id = $lastDeptId[id]");
+                        if($updateDeptId)
+                        {
+                            redirect('all-complaints.php?id='.$cId,'Complaint Updated successfully.');
+                        }
+                    }
+                } 
+
+            }
+           
+        }
+    }
+    }
+    else
+    {
+        redirect('edit-complaint.php?id='.$cId,'Something went wrong!');
+    }
+    }
+else
+{
+    redirect('edit-complaint.php?id='.$cId,'All the fields are mandatory!');
+}
+
 
 
 

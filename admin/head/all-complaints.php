@@ -62,10 +62,16 @@
                         <div>In-progress</div>
                         <?php
                     }
-                    else
+                    elseif($complaintsItem['dept_comp_officer']=='1' && $complaintsItem['dept_head'] == '1' && $complaintsItem['approved'] == '1' && $complaintsItem['closed'] == '1')
                     {
                         ?>
                         <div>Closed</div>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <div>Pending</div>
                         <?php
                     }
                     

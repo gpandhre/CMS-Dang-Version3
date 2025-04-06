@@ -48,10 +48,16 @@
                         <div>In-progress</div>
                         <?php
                     }
-                    else
+                    elseif($complaintData['routing_officer']=='1' && $complaintData['collector'] == '1' && $complaintData['approved'] == '1' && $complaintData['closed'] == '1')
                     {
                         ?>
                         <div>Closed</div>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <div>Pending</div>
                         <?php
                     }
                     
